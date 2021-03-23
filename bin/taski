@@ -1,0 +1,95 @@
+#! /bin/sh
+
+##
+# taksi
+#
+#	Assess/Evaluate collected support data
+#	For a given data locale, when new support data
+#	is deposited, provide a means to:
+#	- implement a simple data pipeline process
+#	  - look for certain collection scenarios, unpack the respective bundle
+#	  - launch respective analysis tool, collecting resulting output
+#	  - if previous runs are available, summarize trend status
+#	  - provide guidance on next steps
+#	  - manage content for longer-term retention structure
+#
+#	NOTE: Translate taksialudo from Esperanto to English -> assess/evaluate
+##
+
+# Usage
+#	
+#if [ "$1" = "--help" ] || \
+#	[ "$1" = "help" ] || \
+#	[ "$1" = "-h" ] || \
+#  then
+#        echo "Usage: `basename $0` [ -v | --verbose ]"
+#        exit 1
+#fi
+
+# Invocation
+#	can be run as any user
+#	- with read access to the data files
+#	- with execute access to the trend tools
+#	- and write access to the configured archive directories
+
+# Configuration parameters / files
+  CF=/usr/etc/taksi.conf
+  [ -r ${CF} ] && source ${CF}
+  CF=/etc/taksi.conf
+  [ -r ${CF} ] && source ${CF}
+  CF=./taksi.conf
+  [ -r ${CF} ] && source ${CF}
+
+# Source and use helper functions
+  [ -r ${functionDir}/helper/collection ] && \
+	source ${functionDir}/helper/collection
+  [ -r ./helper/collection ] && \
+	source ./helper/collection
+
+  # evaluate respective data repositories
+    ingest
+    sandbox
+    archive
+
+##
+# look for target file bundles to assess/evaluate
+##
+
+for tf in $(find ${ingestDir} -type f -newer ${archiveDir}/${archiveEval} 2>/dev/null)
+  do
+	[ -n ${tf} ] && {
+		cp -p ${tf} ${archiveDir}/$(basename ${tf})
+		sb=${scratchDir}/$$ && mkdir ${sb} && cd ${sb}
+		if [ ${use_aludo} = "Y" ]
+		  then
+			if echo ${tf} | grep ".${suffix_aludo}$" >/dev/null 2>&1
+			  then
+				which tar >/dev/null 2>&1 && \
+					tar -zxf ${tf} >/dev/null 2>&1
+					cat */*/Report > ${archiveDir}/$(basename ${tf}).aludo
+				if [ ${use_scaL0} = "Y" ]
+				  then
+					cmd="/opt/suse/sca/bin/sca-L0.sh"
+					[ -x ${cmd} ] && {
+						for suff in ${suffix_scaL0}
+						  do
+							tf2=$(ls */*/*.${suff})
+							[ -e ${tf2} ] && \
+								$cmd -t ${sb} -o ${archiveDir}/$(basename ${tf}).sca-L0 ${tf2}
+						  done
+					}
+				fi
+			fi
+
+		fi
+		# rm -f ${tf} >/dev/null 2>&1
+	}
+
+  done
+touch ${archiveDir}/${archiveEval}
+
+##
+# compare assessment/evaluation to previous ones
+##
+
+# coming soon
