@@ -20,11 +20,12 @@ function ingest {
 	if [ $(ls -d ${ingestDir} 2>/dev/null | wc -l) -eq 0 ]
 	  then
 		echo "=> Note : no content to assess/evaluate"
-		exit 0
+		exit 1
 	fi
     else
-	echo "=> Error : cannot create ingestDir : ${ingestDir}"
-	exit 1
+	mkdir -p ${ingestDir} || \
+		echo "=> Error : cannot create ingestDir : ${ingestDir}" && \
+			exit 1
   fi
 
 }

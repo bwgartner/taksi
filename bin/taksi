@@ -74,7 +74,7 @@ for tf in $(find ${ingestDir} -type f -newer ${archiveDir}/${archiveEval} 2>/dev
 						for suff in ${suffix_scaL0}
 						  do
 							tf2=$(ls */*/*.${suff})
-							[ -e ${tf2} ] && \
+							[ -r ${tf2} ] && \
 								$cmd -t ${sb} -o ${archiveDir}/$(basename ${tf}).sca-L0 ${tf2}
 						  done
 					}
@@ -82,7 +82,9 @@ for tf in $(find ${ingestDir} -type f -newer ${archiveDir}/${archiveEval} 2>/dev
 			fi
 
 		fi
-		# rm -f ${tf} >/dev/null 2>&1
+		rm -rf ${sb} >/dev/null 2>&1
+		rm -f ${tf} >/dev/null 2>&1
+
 	}
 
   done
