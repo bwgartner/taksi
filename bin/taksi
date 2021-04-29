@@ -79,6 +79,23 @@ for tf in $(find ${ingestDir} -type f -newer ${archiveDir}/${archiveEval} 2>/dev
 						  done
 					}
 				fi
+
+				if [ ${use_scatool} = "Y" ]
+				  then
+					cmd="/usr/sbin/scatool"
+					[ -x ${cmd} ] && {
+						for suff in ${suffix_scatool}
+						  do
+							cd */*
+							tf2=$(ls *.${suff})
+							[ -r ${tf2} ] && \
+								$cmd -a ${tf2} && \
+								mv *.html ${archiveDir}/$(basename ${tf})-report.html
+							cd ../..
+						  done
+					}
+				fi
+
 			fi
 
 		fi
