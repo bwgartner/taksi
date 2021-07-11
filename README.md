@@ -24,7 +24,7 @@ From this source code repo:
         and review the content in the "archiveDir" and runtime "logFile"
 	then setup cron/systemd timer to regularly perform this assessment
 
-Or for packaged-based (RPM) for openSUSE/SUSE, see OBS(https://build.opensuse.org/package/show/home:bwgartner:SCA/taksi)
+Or for packaged-based (RPM) for openSUSE/SUSE, see [OpenBuildService](https://build.opensuse.org/package/show/home:bwgartner:SCA/taksi)
 
     this has suggested package dependencies
 	aludo
