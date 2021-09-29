@@ -34,17 +34,17 @@
 
 # Configuration parameters / files
   CF=/usr/etc/taksi.conf
-  [ -r ${CF} ] && source ${CF}
+  [ -r ${CF} ] && . ${CF}
   CF=/etc/taksi.conf
-  [ -r ${CF} ] && source ${CF}
+  [ -r ${CF} ] && . ${CF}
   CF=./taksi.conf
-  [ -r ${CF} ] && source ${CF}
+  [ -r ${CF} ] && . ${CF}
 
 # Source and use helper functions
   [ -r ${functionDir}/helper/collection ] && \
-	source ${functionDir}/helper/collection
+	. ${functionDir}/helper/collection
   [ -r ./helper/collection ] && \
-	source ./helper/collection
+	. ./helper/collection
 
   # evaluate respective data repositories
     ingest
